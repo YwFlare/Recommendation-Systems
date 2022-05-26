@@ -3,8 +3,12 @@ from data_split import *
 
 def evaluate_accuracy(predict_results):
     metric = d2l.Accumulator(3)
+    #o = open('temp.txt', 'w')
     for uid, iid, real_rating, pred_rating in predict_results:
-        metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
+        #o.write(str((pred_rating - real_rating) ** 2) + ' ' + str(abs(pred_rating - real_rating)) +  '\n')
+        if pred_rating != 0:
+            metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
+
     return round(np.sqrt(metric[1] / metric[0]), 4), round(metric[2] / metric[0], 4)
 
 
@@ -26,11 +30,11 @@ def predict_test(file_path, write_path, cf):
 
 class BaselineCF:
 
-    def __init__(self, dataset, epochs, alpha, parameter, columns):
+    def __init__(self, dataset, epochs, parameter_bu, parameter_bi, columns):
         self.dataset = dataset
         self.epochs = epochs
-        self.alpha = alpha
-        self.parameter = parameter
+        self.parameter_bu = parameter_bu
+        self.parameter_bi = parameter_bi
         self.columns = columns
         self.users_ratings = dataset.groupby(self.columns[0]).agg([list])[[self.columns[1], self.columns[2]]]
         self.items_ratings = dataset.groupby(self.columns[1]).agg([list])[[self.columns[0], self.columns[2]]]
@@ -40,22 +44,42 @@ class BaselineCF:
 
     def train_bl(self, validation_set):
         animator = d2l.Animator(xlabel='epoch', xlim=[1, self.epochs], ylim=[0, 50],
-                                legend=['RMSE', 'MAE'])
-        timer = d2l.Timer()
-        for epoch in range(self.epochs):
-            print('epoch :{}'.format(epoch))
-            timer.start()
-            for i, (uid, iid, real_rating) in enumerate(self.dataset.itertuples(index=False)):
-                error = real_rating - (self.global_mean + self.bu[uid] + self.bi[iid])
-                self.bu[uid] += self.alpha * (error - self.parameter * self.bu[uid])
-                self.bi[iid] += self.alpha * (error - self.parameter * self.bu[uid])
-            timer.stop()
+                                legend=['train RMSE', 'validation RMSE'])
+        #timer = d2l.Timer()
+        # for epoch in range(self.epochs):
+        #     print('epoch :{}'.format(epoch))
+        #     metric = d2l.Accumulator(2)
+        #     timer.start()
+        #     for i, (uid, iid, real_rating) in enumerate(self.dataset.itertuples(index=False)):
+        #         error = real_rating - (self.global_mean + self.bu[uid] + self.bi[iid])
+        #
+        #         self.bu[uid] += self.alpha * (error - self.parameter * self.bu[uid])
+        #         self.bi[iid] += self.alpha * (error - self.parameter * self.bi[iid])
+        #         metric.add(1, error ** 2)
+        #     timer.stop()
+        #     pred_results = self.validate(validation_set)
+        #     rmse, mae = evaluate_accuracy(pred_results)
+        #     animator.add(epoch + 1, (round(np.sqrt(metric[1] / metric[0]), 4), rmse))
+
+        for i in range(self.epochs):
+            print("iter%d" % i)
+            for iid, uids, ratings in self.items_ratings.itertuples(index=True):
+                _sum = 0
+                for uid, rating in zip(uids, ratings):
+                    _sum += rating - self.global_mean - self.bu[uid]
+                self.bi[iid] = _sum / (self.parameter_bi + len(uids))
+
+            for uid, iids, ratings in self.users_ratings.itertuples(index=True):
+                _sum = 0
+                for iid, rating in zip(iids, ratings):
+                    _sum += rating - self.global_mean - self.bi[iid]
+                self.bu[uid] = _sum / (self.parameter_bu + len(iids))
+
             pred_results = self.validate(validation_set)
             rmse, mae = evaluate_accuracy(pred_results)
-            print(rmse, mae)
+            animator.add(i + 1, (mae, rmse))
 
-            animator.add(epoch + 1, (rmse, mae))
-        print('training time :{}'.format(timer.sum()))
+        #print('training time :{}'.format(timer.sum()))
         d2l.plt.show()
 
     def predict(self, uid, iid):
@@ -79,11 +103,10 @@ class BaselineCF:
 
 
 if __name__ == '__main__':
-    train_path = 'data-202205/train5.txt'
-    test_path = 'data-202205/test5.txt'
-    answer_path = 'answer/1.txt'
-    train, validation = data_split(train_path, random=False)
-    bcf = BaselineCF(train, 30, 0.1, 0.1, ['userId', 'movieId', 'rating'])
+    train_path = 'data-202205/train.txt'
+    test_path = 'data-202205/test.txt'
+    answer_path = 'answer/answer2.txt'
+    train, validation = data_split(train_path, random=True)
+    bcf = BaselineCF(train, 20, 0.1, 0.1, ['userId', 'movieId', 'rating'])
     bcf.train_bl(validation)
     predict_test(test_path, answer_path, bcf)
-
