@@ -6,8 +6,8 @@ answer_path = 'answer/1.txt'
 train, validation = data_split(train_path, random=False)
 dataset = train
 epochs = 20
-alpha = 0.1
-parameter = 0.1
+alpha = 0.05
+parameter = 0.05
 columns = ['userId', 'movieId', 'rating']
 users_ratings = dataset.groupby(columns[0]).agg([list])[[columns[1], columns[2]]]
 items_ratings = dataset.groupby(columns[1]).agg([list])[[columns[0], columns[2]]]
@@ -17,22 +17,13 @@ bi = dict(zip(items_ratings.index, np.zeros(len(items_ratings))))
 
 
 def evaluate_accuracy(predict_results):
-    # metric = d2l.Accumulator(3)
-    # for uid, iid, real_rating, pred_rating in predict_results:
-    #     metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
-    # return round(np.sqrt(metric[1] / metric[0]), 4), round(metric[2] / metric[0], 4)
-    length = 0
-    _rmse_sum = 0
-    _mae_sum = 0
+    metric = d2l.Accumulator(3)
     for uid, iid, real_rating, pred_rating in predict_results:
-        length += 1
-        _rmse_sum += (pred_rating - real_rating) ** 2
-        _mae_sum += abs(pred_rating - real_rating)
-    return round(np.sqrt(_rmse_sum / length), 4), round(_mae_sum / length, 4)
+        metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
+    return round(np.sqrt(metric[1] / metric[0]), 4), round(metric[2] / metric[0], 4)
 
 
 def predict_test(file_path, write_path):
-    print("读取文件中...")
     f = open(file_path, 'r')
     b = open(write_path, 'w')
     while True:
@@ -45,9 +36,6 @@ def predict_test(file_path, write_path):
             line = f.readline().split('\n')[0]
             rating = predict(int(user), int(line))
             b.write(line + '  ' + str(rating) + '\n')
-
-
-
 
 
 def train_bl(validation_set):
@@ -70,6 +58,7 @@ def train_bl(validation_set):
     print('training time :{}'.format(timer.sum()))
     d2l.plt.show()
 
+
 def predict(uid, iid):
     if iid not in items_ratings.index:
         return 0
@@ -80,17 +69,12 @@ def predict(uid, iid):
         predict_rating = 0
     return predict_rating
 
+
 def validate(validation_set):
     for uid, iid, real_rating in validation_set.itertuples(index=False):
-        try:
-            pred_rating = predict(uid, iid)
-        except Exception as e:
-            print(e)
-        else:
-            yield uid, iid, real_rating, pred_rating
+        yield uid, iid, real_rating, predict(uid, iid)
 
 
 if __name__ == '__main__':
     train_bl(validation)
     predict_test(test_path, answer_path)
-
