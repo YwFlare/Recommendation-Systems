@@ -3,17 +3,14 @@ from data_split import *
 
 def evaluate_accuracy(predict_results):
     metric = d2l.Accumulator(3)
-    #o = open('temp.txt', 'w')
     for uid, iid, real_rating, pred_rating in predict_results:
-        #o.write(str((pred_rating - real_rating) ** 2) + ' ' + str(abs(pred_rating - real_rating)) +  '\n')
         if pred_rating != 0:
             metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
-
+    print(metric[0])
     return round(np.sqrt(metric[1] / metric[0]), 4), round(metric[2] / metric[0], 4)
 
 
 def predict_test(file_path, write_path, cf):
-    print("读取文件中...")
     f = open(file_path, 'r')
     b = open(write_path, 'w')
     while True:
@@ -62,7 +59,6 @@ class BaselineCF:
         #     animator.add(epoch + 1, (round(np.sqrt(metric[1] / metric[0]), 4), rmse))
 
         for i in range(self.epochs):
-            print("iter%d" % i)
             for iid, uids, ratings in self.items_ratings.itertuples(index=True):
                 _sum = 0
                 for uid, rating in zip(uids, ratings):
@@ -77,9 +73,8 @@ class BaselineCF:
 
             pred_results = self.validate(validation_set)
             rmse, mae = evaluate_accuracy(pred_results)
+            print(rmse, mae)
             animator.add(i + 1, (mae, rmse))
-
-        #print('training time :{}'.format(timer.sum()))
         d2l.plt.show()
 
     def predict(self, uid, iid):
@@ -103,10 +98,10 @@ class BaselineCF:
 
 
 if __name__ == '__main__':
-    train_path = 'data-202205/train.txt'
-    test_path = 'data-202205/test.txt'
-    answer_path = 'answer/answer2.txt'
+    train_path = 'data-202205/train3.txt'
+    test_path = 'data-202205/test3.txt'
+    answer_path = 'answer/b.txt'
     train, validation = data_split(train_path, random=True)
-    bcf = BaselineCF(train, 20, 0.1, 0.1, ['userId', 'movieId', 'rating'])
+    bcf = BaselineCF(train, 10, 0.3, 0, ['userId', 'movieId', 'rating'])
     bcf.train_bl(validation)
     predict_test(test_path, answer_path, bcf)

@@ -3,8 +3,11 @@ from data_split import *
 
 def evaluate_accuracy(predict_results):
     metric = d2l.Accumulator(3)
+    #print(predict_results.shape[0])
     for uid, iid, real_rating, pred_rating in predict_results:
         metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
+    print(metric[1])
+    print(metric[0])
     return round(np.sqrt(metric[1] / metric[0]), 4), round(metric[2] / metric[0], 4)
 
 
@@ -102,7 +105,7 @@ if __name__ == '__main__':
     train_path = 'data-202205/train3.txt'
     test_path = 'data-202205/test3.txt'
     answer_path = 'answer/3.txt'
-    train, validation = data_split(train_path, random=False)
-    bcf = BiasSvd(train, 30, 0.001, 100, 0.08, 0.08, 0.08, 0.08, ['userId', 'movieId', 'rating'])
+    train, validation = data_split(train_path, x=0.9, random=True)
+    bcf = BiasSvd(train, 10, 0.0003, 50, 0.1, 0.1, 0.1, 0.1, ['userId', 'movieId', 'rating'])
     bcf.train_bl(validation)
     predict_test(test_path, answer_path, bcf)
