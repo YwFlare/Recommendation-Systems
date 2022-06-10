@@ -45,6 +45,8 @@ Partial derivative of loss function:
 $$
 \frac{\partial}{\partial b_{u}} f\left(b_{u}, b_{i}\right)=-2 \sum_{u, i \in R}\left(r_{u i}-\mu-b_{u}-b_{i}\right)+2 \lambda * b_{u}
 $$
+
+
 If the partial derivative is 0, then:
 
 
@@ -54,6 +56,8 @@ $$
 &\sum_{u, i \in R}\left(r_{u i}-\mu-b_{i}\right)=\sum_{u, i \in R} b_{u}+\lambda * b_{u}
 \end{aligned}
 $$
+
+
 Simplify the formula:
 
 
@@ -73,6 +77,8 @@ Root Mean Square Error:
 $$
 \operatorname{RMSE}(\mathrm{X}, \mathrm{h})=\sqrt{\frac{1}{\mathrm{~m}} \sum_{\mathrm{i}=1}^{\mathrm{m}}\left(\mathrm{h}\left(\mathrm{x}^{(\mathrm{i})}\right)-\mathrm{y}^{(\mathrm{i})}\right)^{2}}
 $$
+
+
 Mean Absolute Error:
 
 
