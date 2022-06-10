@@ -22,6 +22,8 @@ Some items are generally higher than others, and some items are generally lower 
 ### Loss function
 
 The average score of all movies can be calculated directly, so the problem is to measure the score bias of each user and the score bias of each movie. For the linear regression problem, we can use the square difference to construct the loss function as follows:
+
+
 $$
 \begin{aligned}
 \text { Cost } &=\sum_{u, i \in R}\left(r_{u i}-\hat{r}_{u i}\right)^{2} \\
@@ -38,10 +40,14 @@ $$
 For the solution of the minimum process, we use the alternating least square method to optimize the implementation. The idea of least square method: find the partial derivative of the loss function, and then make the partial derivative 0
 
 Partial derivative of loss function:
+
+
 $$
 \frac{\partial}{\partial b_{u}} f\left(b_{u}, b_{i}\right)=-2 \sum_{u, i \in R}\left(r_{u i}-\mu-b_{u}-b_{i}\right)+2 \lambda * b_{u}
 $$
 If the partial derivative is 0, then:
+
+
 $$
 \begin{aligned}
 &\sum_{u, i \in R}\left(r_{u i}-\mu-b_{u}-b_{i}\right)=\lambda * b_{u} \\
@@ -49,6 +55,8 @@ $$
 \end{aligned}
 $$
 Simplify the formula:
+
+
 $$
 b_{u}:=\frac{\sum_{u, i \in R}\left(r_{u i}-\mu-b_{i}\right)}{\lambda_{1}+|R(u)|}
 $$
@@ -60,10 +68,14 @@ $$
 ### Evaluation method
 
 Root Mean Square Error:
+
+
 $$
 \operatorname{RMSE}(\mathrm{X}, \mathrm{h})=\sqrt{\frac{1}{\mathrm{~m}} \sum_{\mathrm{i}=1}^{\mathrm{m}}\left(\mathrm{h}\left(\mathrm{x}^{(\mathrm{i})}\right)-\mathrm{y}^{(\mathrm{i})}\right)^{2}}
 $$
 Mean Absolute Error:
+
+
 $$
 \operatorname{MAE}(\mathrm{X}, \mathrm{h})=\frac{1}{\mathrm{~m}} \sum_{\mathrm{i}=1}^{\mathrm{m}}\left|\mathrm{h}\left(\mathrm{x}^{(\mathrm{i})}\right)-\mathrm{y}^{(\mathrm{i})}\right|
 $$
