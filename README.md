@@ -1,7 +1,7 @@
 # Recommendation-Systems
 This project is for our course Big data technology and application in the second semester of junior year at Nankai University, finished by Wei-Feng Yuan.
 
-In this project, I use a mode mixed with baseline and biassvd
+In this project, I use a mode mixed with baseline and biassvd collaborative filtering.
 
 ## Baseline CF
 
@@ -17,7 +17,7 @@ Some items are generally higher than others, and some items are generally lower 
 
 3）Calculate the score and average score of each film $\mu$ 's offset value $b_{i}$
 
-4）Predict user ratings for movies：  $\hat{r}_{u i}=b_{u i}=\mu+b_{u}+b_{i}$ 
+4）Predict user ratings for movies
 
 ### Loss function
 
