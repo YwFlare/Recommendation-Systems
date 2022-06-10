@@ -135,7 +135,7 @@ $$
 
 ## RMSE and MAE curves
 
-![7](https://raw.githubusercontent.com/Falcon-Yuan/images/master/202206101849480.svg?token=APJNLFV5Q3E25PSOCKQCB2TCUMRAM)
+<img src="https://raw.githubusercontent.com/Falcon-Yuan/images/master/202206101906299.png?token=APJNLFUA4QJHNCLHLXUXT3TCUMS5Q" alt="7" style="zoom:38%;" />
 
 ## Pay attention
 
