@@ -99,6 +99,8 @@ The item hidden factor matrix represents the item characteristics that will affe
 Take out the user vector from the user hidden factor matrix, and take out the dot product of the item vector from the item hidden factor matrix to get the user's score prediction of the item
 
 Using the idea of optimizing the loss function to solve the two matrices, the gradient descent optimization method can be used
+
+
 $$
 \begin{aligned}
 \hat{r}_{u i} &=\mu+b_{u}+b_{i}+\overrightarrow{p_{u k}} \cdot \overrightarrow{q_{k i}} \\
@@ -135,7 +137,7 @@ $$
 
 ## RMSE and MAE curves
 
-<img src="https://raw.githubusercontent.com/Falcon-Yuan/images/master/202206101906299.png?token=APJNLFUA4QJHNCLHLXUXT3TCUMS5Q" alt="7" style="zoom:38%;" />
+<img src="https://raw.githubusercontent.com/Falcon-Yuan/images/master/202206101914185.png?token=APJNLFRXMFGGMO35T5DL6G3CUMT3S" alt="7" style="zoom:38%;" />
 
 ## Pay attention
 
