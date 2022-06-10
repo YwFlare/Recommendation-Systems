@@ -3,7 +3,7 @@ from data_split import *
 
 def evaluate_accuracy(predict_results):
     metric = d2l.Accumulator(3)
-    #print(predict_results.shape[0])
+    # print(predict_results.shape[0])
     for uid, iid, real_rating, pred_rating in predict_results:
         metric.add(1, (pred_rating - real_rating) ** 2, abs(pred_rating - real_rating))
     print(metric[1])

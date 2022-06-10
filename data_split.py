@@ -1,10 +1,16 @@
+"""
+此文件用于划分数据集和验证集
+"""
 import pandas as pd
 import numpy as np
 from d2l import torch as d2l
 
 
-def data_split(data_path, x=0.8, random=False):
-    print("读取文件中...")
+def data_split(data_path, x=0.9, random=False):
+    """
+    切分数据集和验证集，默认数据集和验证集比例为 9:1
+    """
+    print("Split data ...")
     timer = d2l.Timer()
     timer.start()
     f = open(data_path, 'r')
@@ -20,12 +26,10 @@ def data_split(data_path, x=0.8, random=False):
             temp.append([int(user), int(item), int(rating)])
 
     ratings = pd.DataFrame(temp)
-    ratings.rename(columns={0: 'userId', 1: 'movieId', 2: 'rating'}, inplace=True)
-    print('数据大小:{}'.format(ratings.shape))
-    print("文件读取完成，正在切分数据集...")
+    ratings.rename(columns={0: 'uid', 1: 'iid', 2: 'rating'}, inplace=True)
     validation_index = []
-    for uid in ratings.groupby("userId").any().index:
-        user_rating_data = ratings.where(ratings["userId"] == uid).dropna()
+    for uid in ratings.groupby("uid").any().index:
+        user_rating_data = ratings.where(ratings["uid"] == uid).dropna()
         if random:
             index = list(user_rating_data.index)
             np.random.shuffle(index)
@@ -38,8 +42,7 @@ def data_split(data_path, x=0.8, random=False):
     validation_set = ratings.loc[validation_index]
     train_set = ratings.drop(validation_index)
     timer.stop()
-    print("数据集切分完成...")
-    print('数据集切分耗时 :{} sec'.format(timer.sum()))
+    print('Takes :{} sec'.format(timer.sum()))
     return train_set, validation_set
 
 

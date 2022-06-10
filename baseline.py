@@ -42,7 +42,7 @@ class BaselineCF:
     def train_bl(self, validation_set):
         animator = d2l.Animator(xlabel='epoch', xlim=[1, self.epochs], ylim=[0, 50],
                                 legend=['train RMSE', 'validation RMSE'])
-        #timer = d2l.Timer()
+        # timer = d2l.Timer()
         # for epoch in range(self.epochs):
         #     print('epoch :{}'.format(epoch))
         #     metric = d2l.Accumulator(2)
