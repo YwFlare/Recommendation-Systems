@@ -19,6 +19,8 @@ Some items are generally higher than others, and some items are generally lower 
 
 4）Predict user ratings for movies
 
+The calculation formula is as follows：
+
 
 $$
 \hat{r}_{u i}=b_{u i}=\mu+b_{u}+b_{i}
