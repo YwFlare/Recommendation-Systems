@@ -17,14 +17,7 @@ Some items are generally higher than others, and some items are generally lower 
 
 3）Calculate the score and average score of each film $\mu$ 's offset value $b_{i}$
 
-4）Predict user ratings for movies
-
-The calculation formula is as follows：
-
-
-$$
-\hat{r}_{u i}=b_{u i}=\mu+b_{u}+b_{i}
-$$
+4）Predict user ratings for movies with bias
 
 ### Loss function
 
