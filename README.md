@@ -18,12 +18,9 @@ Some items are generally higher than others, and some items are generally lower 
 3）Calculate the score and average score of each film $\mu$ 's offset value $b_{i}$
 
 4）Predict user ratings for movies
-
-
 $$
 \hat{r}_{u i}=b_{u i}=\mu+b_{u}+b_{i}
 $$
-
 
 ### Loss function
 
@@ -49,7 +46,6 @@ $$
 4）Take out the user vector from the user hidden factor matrix, and take out the dot product of the item vector from the item hidden factor matrix to get the user's score prediction of the item
 
 5）Using the idea of optimizing the loss function to solve the two matrices, the gradient descent optimization method can be used
-
 
 $$
 \begin{aligned}
