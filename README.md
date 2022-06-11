@@ -17,37 +17,38 @@ Some items are generally higher than others, and some items are generally lower 
 
 3）Calculate the score and average score of each film $\mu$ 's offset value $b_{i}$
 
-4）Predict user ratings for movies $\hat{r}_{u i}=b_{u i}=\mu+b_{u}+b_{i}$
+4）Predict user ratings for movies
+
+
+$$
+\hat{r}_{u i}=b_{u i}=\mu+b_{u}+b_{i}
+$$
+
 
 ### Loss function
 
-The average score of all movies can be calculated directly, so the problem is to measure the score bias of each user and the score bias of each movie. For the linear regression problem, we can use the square difference to construct the loss function as follows:
+The average score of all movies can be calculated directly, so the problem is to measure the score bias of each user and the score bias of each movie. For the linear regression problem, we can use the square difference with L2 regularization to construct the loss function：
 
 
-$$
-\begin{aligned}
-\text { Cost } &=\sum_{u, i \in R}\left(r_{u i}-\hat{r}_{u i}\right)^{2} \\
-&=\sum_{u, i \in R}\left(r_{u i}-\mu-b_{u}-b_{i}\right)^{2}
-\end{aligned}
-$$
-Add L2 regularization:
 $$
 \text { Cost }=\sum_{u, i \in R}\left(r_{u i}-\mu-b_{u}-b_{i}\right)^{2}+\lambda *\left(\sum_{u} b_{u}{ }^{2}+\sum_{i} b_{i}{ }^{2}\right)
 $$
+
+
 
 ## BiasSvd CF
 
 ### Basic principles
 
-Split the user item scoring matrix into two small matrices, the user hidden factor matrix and the item hidden factor matrix
+1）Split the user item scoring matrix into two small matrices, the user hidden factor matrix and the item hidden factor matrix
 
-The user hidden factor matrix represents the user characteristics that will affect the user's rating of items
+2）The user hidden factor matrix represents the user characteristics that will affect the user's rating of items
 
-The item hidden factor matrix represents the item characteristics that will affect the item score
+3）The item hidden factor matrix represents the item characteristics that will affect the item score
 
-Take out the user vector from the user hidden factor matrix, and take out the dot product of the item vector from the item hidden factor matrix to get the user's score prediction of the item
+4）Take out the user vector from the user hidden factor matrix, and take out the dot product of the item vector from the item hidden factor matrix to get the user's score prediction of the item
 
-Using the idea of optimizing the loss function to solve the two matrices, the gradient descent optimization method can be used
+5）Using the idea of optimizing the loss function to solve the two matrices, the gradient descent optimization method can be used
 
 
 $$
