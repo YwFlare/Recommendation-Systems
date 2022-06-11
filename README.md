@@ -1,5 +1,5 @@
 # Recommendation-Systems
-This project is for our course Big data technology and application in the second semester of junior year at Nankai University, finished by Wei-Feng Yuan.
+This project is for our course Big data technology and application in the second semester of junior year at Nankai University, finished by Falcon Yuan.
 
 In this project, I use  **collaborative filtering** model based on **baseline** and **biassvd** to predict user ratings for movies, and achieved a good result.
 
